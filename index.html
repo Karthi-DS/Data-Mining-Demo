@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive Linear Regression Playground - a simple data mining demonstration">
+  <title>Linear Regression Playground</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav container">
+      <div class="brand">
+        <span class="brand-mark">LR</span>
+        <span>Linear Regression Playground</span>
+      </div>
+      <a class="nav-link" href="#demo">Try the Demo ↓</a>
+    </nav>
+
+    <div class="hero-content container">
+      <div class="hero-copy">
+        <p class="eyebrow">DATA MINING • INTERACTIVE DEMO</p>
+        <h1>Understand prediction<br><span>through relationships.</span></h1>
+        <p class="hero-text">
+          Explore how a linear regression model finds a best-fit line,
+          measures error, and predicts a continuous numerical value.
+        </p>
+        <div class="hero-tags">
+          <span>Independent X</span>
+          <span>Dependent Y</span>
+          <span>Best-fit line</span>
+          <span>MSE</span>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-label">Simple Linear Regression</div>
+        <div class="formula">ŷ = b₀ + b₁x</div>
+        <div class="formula-help">
+          <span>ŷ <small>predicted value</small></span>
+          <span>b₀ <small>intercept</small></span>
+          <span>b₁ <small>slope</small></span>
+          <span>x <small>input</small></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section intro container">
+      <div class="section-heading">
+        <p class="eyebrow">THE IDEA</p>
+        <h2>What is Linear Regression?</h2>
+        <p>
+          Linear Regression is a supervised machine learning algorithm mainly
+          used to predict a continuous numerical value. It finds a relationship
+          between an independent variable X and a dependent variable Y.
+        </p>
+      </div>
+
+      <div class="concept-grid">
+        <article class="concept-card">
+          <div class="icon">01</div>
+          <h3>Collect Data</h3>
+          <p>Start with observed X and Y values.</p>
+        </article>
+        <article class="concept-card">
+          <div class="icon">02</div>
+          <h3>Fit a Line</h3>
+          <p>Find the line that is closest to the data overall.</p>
+        </article>
+        <article class="concept-card">
+          <div class="icon">03</div>
+          <h3>Predict</h3>
+          <p>Use the fitted equation for a new X value.</p>
+        </article>
+        <article class="concept-card">
+          <div class="icon">04</div>
+          <h3>Evaluate</h3>
+          <p>Use error such as Mean Squared Error (MSE).</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="demo" class="section demo-section">
+      <div class="container">
+        <div class="section-heading centered">
+          <p class="eyebrow">LIVE DEMONSTRATION</p>
+          <h2>Hours Studied → Exam Score</h2>
+          <p>
+            Change the values below and watch the regression line,
+            equation, error, and prediction update instantly.
+          </p>
+        </div>
+
+        <div class="toolbar">
+          <div>
+            <strong>Dataset</strong>
+            <span class="muted">Use the example or create your own.</span>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn secondary" id="sampleBtn">Load Example</button>
+            <button class="btn ghost" id="clearBtn">Clear</button>
+          </div>
+        </div>
+
+        <div class="workspace">
+          <section class="panel data-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Your Data</h3>
+                <p>Add at least 2 valid points.</p>
+              </div>
+              <button class="small-btn" id="addRowBtn">+ Add Row</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>X — Hours</th>
+                    <th>Y — Score</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="dataBody"></tbody>
+              </table>
+            </div>
+
+            <button class="btn primary full" id="calculateBtn">Calculate Regression</button>
+            <div class="message" id="message" aria-live="polite"></div>
+          </section>
+
+          <section class="panel chart-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Regression Graph</h3>
+                <p>Dots = actual data • line = model</p>
+              </div>
+              <div class="legend">
+                <span><i class="dot-key"></i> Data</span>
+                <span><i class="line-key"></i> Regression</span>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chart" aria-label="Linear regression graph"></canvas>
+              <div class="empty-chart" id="emptyChart">
+                <strong>Add data to see the graph</strong>
+                <span>Your regression line will appear here.</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="results-grid" id="results">
+          <article class="result-card equation-card">
+            <span class="result-label">Regression Equation</span>
+            <strong id="equation">ŷ = —</strong>
+            <p id="equationDetail">Calculate the model to see b₀ and b₁.</p>
+          </article>
+          <article class="result-card">
+            <span class="result-label">Slope (b₁)</span>
+            <strong id="slope">—</strong>
+            <p>Change in predicted Y for a 1-unit increase in X.</p>
+          </article>
+          <article class="result-card">
+            <span class="result-label">Intercept (b₀)</span>
+            <strong id="intercept">—</strong>
+            <p>Predicted Y when X is 0.</p>
+          </article>
+          <article class="result-card">
+            <span class="result-label">Mean Squared Error</span>
+            <strong id="mse">—</strong>
+            <p>Average of squared prediction errors.</p>
+          </article>
+        </section>
+
+        <section class="prediction panel">
+          <div class="prediction-copy">
+            <p class="eyebrow">TRY A NEW OBSERVATION</p>
+            <h3>Make a Prediction</h3>
+            <p>
+              Enter a new X value. The model uses the equation
+              <strong>ŷ = b₀ + b₁x</strong> to estimate Y.
+            </p>
+          </div>
+          <div class="prediction-control">
+            <label for="predictionInput">Hours studied (X)</label>
+            <div class="predict-row">
+              <input id="predictionInput" type="number" value="6" step="any" min="0" placeholder="e.g. 6">
+              <button class="btn primary" id="predictBtn">Predict Score</button>
+            </div>
+            <div class="prediction-output">
+              <span>Predicted Y</span>
+              <strong id="predictionValue">—</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="residual-section">
+          <div class="section-heading">
+            <p class="eyebrow">UNDERSTANDING ERROR</p>
+            <h2>Residuals</h2>
+            <p>
+              A residual is <strong>Actual − Predicted</strong>. It represents
+              the vertical difference between a data point and the regression line.
+            </p>
+          </div>
+          <div class="residual-table-wrap panel">
+            <table class="residual-table">
+              <thead>
+                <tr>
+                  <th>X</th>
+                  <th>Actual Y</th>
+                  <th>Predicted Y</th>
+                  <th>Residual</th>
+                  <th>Squared Error</th>
+                </tr>
+              </thead>
+              <tbody id="residualBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="section workflow container">
+      <div class="section-heading centered">
+        <p class="eyebrow">THE WORKFLOW</p>
+        <h2>From Data to Prediction</h2>
+      </div>
+      <div class="workflow-line">
+        <div><span>1</span><strong>Collect Data</strong><small>Observed values</small></div>
+        <div><span>2</span><strong>Identify X & Y</strong><small>Inputs & output</small></div>
+        <div><span>3</span><strong>Train Model</strong><small>Find coefficients</small></div>
+        <div><span>4</span><strong>Predict</strong><small>Estimate new Y</small></div>
+        <div><span>5</span><strong>Evaluate</strong><small>Measure error</small></div>
+      </div>
+    </section>
+
+    <section class="section applications">
+      <div class="container">
+        <div class="section-heading centered">
+          <p class="eyebrow">REAL-WORLD EXAMPLES</p>
+          <h2>Where can it be used?</h2>
+        </div>
+        <div class="application-grid">
+          <article><span>🏠</span><h3>Real Estate</h3><p>Predicting property prices.</p></article>
+          <article><span>💰</span><h3>Finance</h3><p>Estimating revenue or financial trends.</p></article>
+          <article><span>📊</span><h3>Business</h3><p>Predicting sales from advertising expenditure.</p></article>
+          <article><span>🏥</span><h3>Healthcare</h3><p>Modeling relationships between measurable variables and outcomes.</p></article>
+          <article><span>⚡</span><h3>Energy</h3><p>Predicting energy consumption.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section limitations container">
+      <div class="two-column">
+        <div>
+          <p class="eyebrow">KEY TAKEAWAYS</p>
+          <h2>Simple, fast, interpretable.</h2>
+          <p>
+            Linear regression works well when the relationship between variables
+            is approximately linear and provides an easy-to-understand baseline model.
+          </p>
+        </div>
+        <div class="takeaway-list">
+          <div>✓ Simple and easy to understand</div>
+          <div>✓ Fast and computationally efficient</div>
+          <div>✓ Highly interpretable</div>
+          <div>✓ Useful as a baseline model</div>
+          <div>! Sensitive to outliers</div>
+          <div>! Can perform poorly for strong nonlinear relationships</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        <strong>Linear Regression Playground</strong>
+        <span>Data Mining Demonstration</span>
+      </div>
+      <div class="presented">
+        <span>Presented by</span>
+        <strong>Kartheesvaran S (25MX212)</strong>
+        <strong>Mowlidharan J (25MX213)</strong>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
